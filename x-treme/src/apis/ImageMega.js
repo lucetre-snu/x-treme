@@ -9,8 +9,7 @@ function ImageMeta(props) {
     console.log('description: ' + description);
     console.log('dateTime: ' + dateTime);
     const diary = new Diary('image', filename, description, dateTime, src);
-    props.collection.push(diary);
-    props.onCollectionChange(props.collection);
+    props.onCollectionChange(diary);
   }
 
   function handleChange({
@@ -18,16 +17,15 @@ function ImageMeta(props) {
       files: [file]
     }
   }) {
-    console.log(file);
-    let reader = new FileReader()
-    reader.readAsDataURL(file);
-    reader.onload = () => {
-      const image = reader.result;
-      if (file && file.name) {
+    if (file && file.name) {
+      let reader = new FileReader()
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        const image = reader.result;
         EXIF.getData(file, function() {
           var exifData = EXIF.pretty(this);
           if (exifData) {
-            console.log(exifData);
+            // console.log(exifData);
             const description = decodeURI(escape(EXIF.getTag(this, "ImageDescription")));
             const dateTime = EXIF.getTag(this, "DateTimeOriginal");
             createDiary(file.name, description, dateTime, image);
