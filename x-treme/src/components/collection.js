@@ -26,7 +26,8 @@ export default function Collection() {
               제목: {diary.title} <br />
               설명: {diary.description} <br />
               날짜: {diary.dateTime.toString()} <br />
-              <img width="200px" src={diary.src} alt=""></img>
+              <img width="200px" src={diary.src} alt="">
+              </img>
             </div>)
           }
       </div>
