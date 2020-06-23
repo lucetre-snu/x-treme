@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
+import ImageMega from '../apis/ImageMega';
 
 export default function Example() {
   return <div id="example">
@@ -32,5 +33,12 @@ export default function Example() {
         </Col>
       </Row>
     </Container>  
+
+    <div>
+        <h1>
+          Get EXIF data
+        </h1>
+        <ImageMega />
+    </div>
   </div>;
 }
