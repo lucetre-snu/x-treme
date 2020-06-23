@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Diary from "../entity/Diary"
 import ImageMega from '../apis/ImageMega';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 export default function Collection() {
   const [ collection, setCollection ] = useState([]);
+  const [ date, setDate] = useState([new Date()]);
 
   const handleCollectionChange = (diary) => {
     collection.push(diary);
@@ -11,6 +14,8 @@ export default function Collection() {
     setCollection(collection.slice());
     console.log(collection);
   }
+
+  const onClickDay = date => setDate({date})
 
   return <div id="collection">
       <h2>Collection</h2>
@@ -31,6 +36,7 @@ export default function Collection() {
             </div>)
           }
       </div>
+      <div><Calendar onClickDay={onClickDay}/></div>
       
     </div>;
 }
