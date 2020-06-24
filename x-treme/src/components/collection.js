@@ -3,7 +3,11 @@ import Diary from "../entity/Diary"
 import ImageMega from '../apis/ImageMega';
 import DiaryDetail from './diary-detail';
 import { getPlayList } from '../apis/DataProcessor';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col} from 'react-bootstrap';
+import Modal from 'react-modal'
+import ModalTitle from 'react-bootstrap/ModalTitle'
+import ModalBody from 'react-bootstrap/ModalBody'
+import ModalFooter from 'react-bootstrap/ModalFooter'
 import { Carousel } from 'react-responsive-carousel';
 import moment from "moment";
 import Fab from '@material-ui/core/Fab';
@@ -89,7 +93,83 @@ export default function Collection() {
     else if (_weather === cloudy) {setWeather(cloudy)}
     else if (_weather === rainy) {setWeather(rainy)}
   }
-
+	
+	
+//	const [show, setShow] = useState(false);
+//	const handleClose = () => setShow(false);
+//	const handleShow = () => setShow(true);
+//	
+//	const openModal = () => {
+//		handleShow();
+//		return (
+//			<>
+//				<Modal show={show} onHide={handleClose} backdrop="static" keyboard="false">
+//				<Modal.Header closeButton>
+//					<Modal.Title> File Upload </Modal.Title>
+//				</Modal.Header>
+//				<Modal.Body>
+//						<input type="file" id="file" accept=".jpg, .png"/>
+//				</Modal.Body>
+//				<Modal.Footer>
+//						<Button variant="secondary" onClick={handleClose}>
+//							Close
+//						</Button>
+//						<Button variant="primary" onClick={handleClose}>
+//							Upload
+//						</Button>
+//					</Modal.Footer>
+//				</Modal>
+//			</>
+//			)
+//	}
+	
+//	const [show, setShow] = useState(false);
+//
+//  const handleClose = () => setShow(false);
+//  const handleShow = () => setShow(true);
+//	
+//	function Example() {
+//  return (
+//    <>
+//			handleShow();
+//      <Modal show={show} onHide={handleClose}>
+//        <Modal.Header closeButton>
+//          <Modal.Title>Modal heading</Modal.Title>
+//        </Modal.Header>
+//        <Modal.Body>asdfasdfasdf</Modal.Body>
+//        <Modal.Footer>
+//          <Button variant="secondary" onClick={handleClose}>
+//            Close
+//          </Button>
+//          <Button variant="primary" onClick={handleClose}>
+//            Save Changes
+//          </Button>
+//        </Modal.Footer>
+//      </Modal>
+//    </>
+//  );
+//}
+	
+//	const [open, setOpen] = useState(false);
+//
+//  const handleOpen = () => {
+//    setOpen(true);
+//  };
+//
+//  const handleClose = () => {
+//    setOpen(false);
+//  };
+//	const [modalIsOpen, setModalIsOpen] = useState(false)
+//	<button onClick = {()=> setModalIsOpen(true)}>Open modal</button>
+//	<Modal isOpen={modalIsOpen}>
+//		
+//		<h2> Modal title</h2>
+//		<p> Modal Body</p>
+//		<div>
+//			<button onClick={()=>setModalIsOpen(false)}>Close</button>
+//		</div>
+//	</Modal>
+	
   return <div id="collection">
       <h2>Collection</h2>
       <div>
@@ -127,8 +207,12 @@ export default function Collection() {
        return 'highlight'
       }
     }} className="react-calendar"/></div>
-      <Fab color="secondary" aria-label="add" className={classes.root}>
+      <Fab color="secondary" aria-label="add" className={classes.root}> //onClick={handleOpen}>			
     <AddIcon />
-  </Fab>
-    </div>;
+			</Fab>
+//			<Modal  open={open} onClose={handleClose} >
+//      </Modal>
+    </div>
 }
+				
+				

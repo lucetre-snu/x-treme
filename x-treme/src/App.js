@@ -25,6 +25,7 @@ export default function App() {
             <li>
               <Link to="/example">/example_do_not_remove</Link>
             </li>
+
           </ul>
         </nav>
 
