@@ -14,8 +14,7 @@ import snowy from "../weathers/snowy.jpg";
 
 import 'react-calendar/dist/Calendar.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
-import "./collection.css";
-import "./Calendar.css";
+import "./collection.css"; 
 
 export default function Collection() {
   const [ address, setAddress ] = useState('');
@@ -42,29 +41,7 @@ export default function Collection() {
     })
   }
 
-
-  const checkDateDiary = (date) => {
-    for(var i=0; i<collection.length; i++)
-    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
-      {return collection[i]; break;}}
-  }
-
-  const checkDiaryDate = () => {
-    for(var i=0; i<collection.length; i++)
-    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
-      {}}
-  } 
-
-  console.log(date);
-  for(var i=0; i<collection.length; i++)
-  {console.log(collection[i].dateTime);}
-
-  const onClickDay = (date) => {
-    setDate({date});
-    const selectedDiary = checkDateDiary(date);
-}
-
-    
+  const onClickDay = date => setDate({date})
 
   const weatherChange = (_weather) => {
     if(_weather === snowy) {setWeather(snowy)}
@@ -104,6 +81,45 @@ export default function Collection() {
           </Carousel>
         }
       </div>
-      <div><Calendar onClickDay={onClickDay} className="react-calendar"/></div>
+      <div><Calendar onClickDay={onClickDay}/></div>
+      
     </div>;
 }
+
+
+function photo_upload_modal() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  return (
+    <>
+      <Button variant="primary" onClick={handleShow}>
+        Upload picture
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+					<div>
+						<input type="file" id="file" accept=".jpg, .png, .heif, .heic">  == $0
+						사진을 드래그하거나 첨부해주세요
+					</div>
+				</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
+render(<Example />);
