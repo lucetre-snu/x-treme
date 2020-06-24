@@ -56,16 +56,22 @@ export default function Collection() {
       {}}
   } 
 
-  console.log(date);
+  const mark=[]
+
   for(var i=0; i<collection.length; i++)
-  {console.log(collection[i].dateTime);}
+  {mark.push(moment(String(collection[i].dateTime).slice(0,15)).format("DD-MM-YYYY"));}
 
   const onClickDay = (date) => {
     setDate({date});
     const selectedDiary = checkDateDiary(date);
 }
 
-  const mark=['07-06-2020', '12-06-2020', '14-06-2020']  
+
+    for(var i=0; i<collection.length; i++)
+    {console.log(collection[i].dateTime)
+      }
+      
+      
 
   const weatherChange = (_weather) => {
     if(_weather === snowy) {setWeather(snowy)}
