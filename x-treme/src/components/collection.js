@@ -1,24 +1,44 @@
 import React, { useState } from 'react';
 import Diary from "../entity/Diary"
 import ImageMega from '../apis/ImageMega';
+import DiaryDetail from './diary-detail';
+import { getPlayList } from '../apis/DataProcessor';
+import { Container, Row, Col } from 'react-bootstrap';
+import { Carousel } from 'react-responsive-carousel';
+
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import Carousel from 'react-bootstrap/Carousel';
 import sunny from "../weathers/sunny.jpg";
 import rainy from "../weathers/rainy.jpg";
 import cloudy from "../weathers/cloudy.jpg";
 import snowy from "../weathers/snowy.jpg";
 
+import 'react-calendar/dist/Calendar.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; 
+import "./collection.css"; 
+
 export default function Collection() {
+  const [ address, setAddress ] = useState('');
   const [ collection, setCollection ] = useState([]);
-  const [ date, setDate] = useState([new Date()]);
-  const [weather, setWeather] = useState(sunny);
+  const [ date, setDate ] = useState([new Date()]);
+  const [ weather, setWeather ] = useState(sunny);
 
   const handleCollectionChange = (diary) => {
     collection.push(diary);
+    console.log(collection);
     collection.sort(Diary.compare);
     setCollection(collection.slice());
     console.log(collection);
+  }
+
+  const fetchYouTube = (e) => {
+    e.preventDefault();
+
+    // PLUKkXeVC39Xr97P94HsAvZeWmvcm2fcJI
+    console.log(address);
+    getPlayList(address)
+    .then((res) => {
+      console.log(res);
+    })
   }
 
   const onClickDay = date => setDate({date})
@@ -32,32 +52,34 @@ export default function Collection() {
 
   return <div id="collection">
       <h2>Collection</h2>
-      <div style={{ border: '1px solid black'}}>
-        <Carousel>
-        <Carousel.Item>
-    <img
-      className="d-block w-100"
-      src={weather}  alt="weather picture"/>
-      <Carousel.Caption>
-          <h1>
-            Get EXIF data from an image
-          </h1>
-          <p>
-          <ImageMega collection={ collection } onCollectionChange={handleCollectionChange} />
-          { collection.length === 0 ?
-            <h4>다이어리가 존재하지 않습니다.</h4> :
-            collection.map((diary, index) => <div key={index}>
-              제목: {diary.title} <br />
-              설명: {diary.description} <br />
-              날짜: {diary.dateTime.toString()} <br />
-              <img width="200px" src={diary.src} alt="">
-              </img>
-            </div>)
-          }
-          </p>
-          </Carousel.Caption>
-          </Carousel.Item>
+      <div>
+      
+        <Container>
+          <Row className="justify-content-md-center">
+            <Col>
+              <h1>Upload Photos</h1>
+              <ImageMega collection={ collection } onCollectionChange={handleCollectionChange} />
+            </Col>
+
+            <Col>
+              <h1>Fetch YouTube PlayList</h1>
+              <form>
+                <input type="text" value={address} onChange={e => setAddress(e.target.value)}/>
+                <input type="submit" value="Fetch" onClick={fetchYouTube}/>
+              </form>
+            </Col>
+          </Row>
+        </Container>
+        {/* <img
+          className="d-block w-100"
+          src={weather}  alt="weather picture"/> */}
+
+        { collection.length === 0 ?
+          <h4>다이어리가 존재하지 않습니다.</h4> :
+          <Carousel showThumbs={false} showStatus={false} useKeyboardArrows className="presentation-mode">
+            {collection.map((diary, index) => <DiaryDetail diary={diary} key={index} />)}
           </Carousel>
+        }
       </div>
       <div><Calendar onClickDay={onClickDay}/></div>
       
