@@ -5,6 +5,7 @@ import DiaryDetail from './diary-detail';
 import { getPlayList } from '../apis/DataProcessor';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
+import moment from "moment";
 
 import Calendar from 'react-calendar';
 import sunny from "../weathers/sunny.jpg";
@@ -64,7 +65,7 @@ export default function Collection() {
     const selectedDiary = checkDateDiary(date);
 }
 
-    
+  const mark=['07-06-2020', '12-06-2020', '14-06-2020']  
 
   const weatherChange = (_weather) => {
     if(_weather === snowy) {setWeather(snowy)}
@@ -104,6 +105,11 @@ export default function Collection() {
           </Carousel>
         }
       </div>
-      <div><Calendar onClickDay={onClickDay} className="react-calendar"/></div>
+      <div><Calendar onClickDay={onClickDay} //onChange={this.onChange}//
+    /*value={this.state.date}*/ tileClassName={({ date, view }) => {
+      if(mark.find(x=>x===moment(date).format("DD-MM-YYYY"))){
+       return 'highlight'
+      }
+    }} className="react-calendar"/></div>
     </div>;
 }
