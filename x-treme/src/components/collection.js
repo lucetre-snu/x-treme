@@ -14,7 +14,8 @@ import snowy from "../weathers/snowy.jpg";
 
 import 'react-calendar/dist/Calendar.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
-import "./collection.css"; 
+import "./collection.css";
+import "./Calendar.css";
 
 export default function Collection() {
   const [ address, setAddress ] = useState('');
@@ -41,7 +42,29 @@ export default function Collection() {
     })
   }
 
-  const onClickDay = date => setDate({date})
+
+  const checkDateDiary = (date) => {
+    for(var i=0; i<collection.length; i++)
+    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
+      {return collection[i]; break;}}
+  }
+
+  const checkDiaryDate = () => {
+    for(var i=0; i<collection.length; i++)
+    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
+      {}}
+  } 
+
+  console.log(date);
+  for(var i=0; i<collection.length; i++)
+  {console.log(collection[i].dateTime);}
+
+  const onClickDay = (date) => {
+    setDate({date});
+    const selectedDiary = checkDateDiary(date);
+}
+
+    
 
   const weatherChange = (_weather) => {
     if(_weather === snowy) {setWeather(snowy)}
@@ -81,7 +104,6 @@ export default function Collection() {
           </Carousel>
         }
       </div>
-      <div><Calendar onClickDay={onClickDay}/></div>
-      
+      <div><Calendar onClickDay={onClickDay} className="react-calendar"/></div>
     </div>;
 }
