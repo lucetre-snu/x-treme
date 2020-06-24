@@ -5,6 +5,7 @@ import DiaryDetail from './diary-detail';
 import { getPlayList } from '../apis/DataProcessor';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
+
 import Calendar from 'react-calendar';
 import sunny from "../weathers/sunny.jpg";
 import rainy from "../weathers/rainy.jpg";
@@ -27,6 +28,17 @@ export default function Collection() {
     collection.sort(Diary.compare);
     setCollection(collection.slice());
     console.log(collection);
+  }
+
+  const fetchYouTube = (e) => {
+    e.preventDefault();
+
+    // PLUKkXeVC39Xr97P94HsAvZeWmvcm2fcJI
+    console.log(address);
+    getPlayList(address)
+    .then((res) => {
+      console.log(res);
+    })
   }
 
   const onClickDay = date => setDate({date})
@@ -58,9 +70,9 @@ export default function Collection() {
             </Col>
           </Row>
         </Container>
-        <img
+        {/* <img
           className="d-block w-100"
-          src={weather}  alt="weather picture"/>
+          src={weather}  alt="weather picture"/> */}
 
         { collection.length === 0 ?
           <h4>다이어리가 존재하지 않습니다.</h4> :
