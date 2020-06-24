@@ -5,6 +5,7 @@ import DiaryDetail from './diary-detail';
 import { getPlayList } from '../apis/DataProcessor';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
+import moment from "moment";
 
 import Calendar from 'react-calendar';
 // import sunny from "../weathers/sunny.jpg";
@@ -14,7 +15,8 @@ import Calendar from 'react-calendar';
 
 import 'react-calendar/dist/Calendar.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
-import "./collection.css"; 
+import "./collection.css";
+import "./Calendar.css";
 
 export default function Collection() {
   const [ address, setAddress ] = useState('');
@@ -46,7 +48,35 @@ export default function Collection() {
     })
   }
 
-  const onClickDay = date => setDate({date})
+
+  const checkDateDiary = (date) => {
+    for(var i=0; i<collection.length; i++)
+    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
+      {return collection[i]; break;}}
+  }
+
+  const checkDiaryDate = () => {
+    for(var i=0; i<collection.length; i++)
+    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
+      {}}
+  } 
+
+  const mark=[]
+
+  for(var i=0; i<collection.length; i++)
+  {mark.push(moment(String(collection[i].dateTime).slice(0,15)).format("DD-MM-YYYY"));}
+
+  const onClickDay = (date) => {
+    setDate({date});
+    const selectedDiary = checkDateDiary(date);
+}
+
+
+    for(var i=0; i<collection.length; i++)
+    {console.log(collection[i].dateTime)
+      }
+      
+      
 
   // const weatherChange = (_weather) => {
   //   if (_weather === snowy) {setWeather(snowy)}
@@ -94,7 +124,11 @@ export default function Collection() {
           </Carousel>
         }
       </div>
-      <div><Calendar onClickDay={onClickDay}/></div>
-      
+      <div><Calendar onClickDay={onClickDay} //onChange={this.onChange}//
+    /*value={this.state.date}*/ tileClassName={({ date, view }) => {
+      if(mark.find(x=>x===moment(date).format("DD-MM-YYYY"))){
+       return 'highlight'
+      }
+    }} className="react-calendar"/></div>
     </div>;
 }
