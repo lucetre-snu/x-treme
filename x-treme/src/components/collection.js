@@ -6,6 +6,9 @@ import { getPlayList } from '../apis/DataProcessor';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
 import moment from "moment";
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
+import { makeStyles } from '@material-ui/core/styles';
 
 import Calendar from 'react-calendar';
 import sunny from "../weathers/sunny.jpg";
@@ -71,7 +74,14 @@ export default function Collection() {
     {console.log(collection[i].dateTime)
       }
       
-      
+    const useStyles = makeStyles((theme) => ({
+      root: {
+      bottom: 30,
+      right: 30,
+      position: 'fixed',
+    }}));
+
+    const classes = useStyles();
 
   const weatherChange = (_weather) => {
     if(_weather === snowy) {setWeather(snowy)}
@@ -117,5 +127,8 @@ export default function Collection() {
        return 'highlight'
       }
     }} className="react-calendar"/></div>
+      <Fab color="secondary" aria-label="add" className={classes.root}>
+    <AddIcon />
+  </Fab>
     </div>;
 }
