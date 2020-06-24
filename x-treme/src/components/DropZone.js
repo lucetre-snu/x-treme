@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
 const dragOver = (e) => {
     e.preventDefault();
@@ -12,6 +13,7 @@ const dragLeave = (e) => {
     e.preventDefault();
 }
 
+const [unsupportedFiles, setUnsupportedFiles] = useState([]);
 const handleFiles = (files) => {
 	for(let i = 0; i < files.length; i++) {
     if (validateFile(files[i])) {
@@ -24,6 +26,7 @@ const handleFiles = (files) => {
 				setSelectedFiles(prevArray => [...prevArray, files[i]]);
         // set error message
 				setErrorMessage('File type not permitted');
+				setUnsupportedFiles(prevArray => [...prevArray, files[i]]);
     }
 }
 }
@@ -56,14 +59,52 @@ const validateFile = (file) => {
     return true;
 }
 
+const removeFile = (name) => {
+    // find the index of the item
+    // remove the item from array
+
+    const validFileIndex = validFiles.findIndex(e => e.name === name);
+    validFiles.splice(validFileIndex, 1);
+    // update validFiles array
+    setValidFiles([...validFiles]);
+	
+    const selectedFileIndex = selectedFiles.findIndex(e => e.name === name);
+    selectedFiles.splice(selectedFileIndex, 1);
+    // update selectedFiles array
+    setSelectedFiles([...selectedFiles]);
+	
+		const unsupportedFileIndex = unsupportedFiles.findIndex(e => e.name === name);
+    if (unsupportedFileIndex !== -1) {
+        unsupportedFiles.splice(unsupportedFileIndex, 1);
+        // update unsupportedFiles array
+        setUnsupportedFiles([...unsupportedFiles]);
+    }
+}
+const fileInputRef = useRef();
+const fileInputClicked = () => {
+    fileInputRef.current.click();
+}
+const filesSelected = () => {
+    if (fileInputRef.current.files.length) {
+        handleFiles(fileInputRef.current.files);
+    }
+}
 <div className="container">
     <div className="drop-container" 
 			onDragOver={dragOver}
 			onDragEnter={dragEnter}
 			onDragLeave={dragLeave}
 			onDrop={fileDrop}
+			onClick={fileInputClicked}
 		>
 			<div className="drop-message">
+				<input
+						ref={fileInputRef}
+						className="file-input"
+						type="file"
+						multiple
+						onChange={filesSelected}
+				/>
 				<div className="upload-icon"></div>
 				Drag & Drop files here or click to upload
 			</div>
@@ -74,7 +115,7 @@ const validateFile = (file) => {
     {
         validFiles.map((data, i) => 
             <div className="file-status-bar" key={i}>
-                <div>
+                <div onClick={!data.invalid ? () => openImageModal(data) : () => removeFile(data.name)}>
                     <div className="file-type-logo"></div>
                     <div className="file-type">{fileType(data.name)}</div>
 										{data.invalid ?
@@ -83,11 +124,88 @@ const validateFile = (file) => {
 										}
                     <span className="file-size">({fileSize(data.size)})</span> {data.invalid && <span className='file-error-message'>({errorMessage})</span>}
                 </div>
-                <div className="file-remove">X</div>
+                <div className="file-remove" onClick={() => removeFile(data.name)}>X</div>
             </div>
         )
     }
 </div>
+
+const uploadFiles = () => {
+    uploadModalRef.current.style.display = 'block';
+    uploadRef.current.innerHTML = 'File(s) Uploading...';
+    for (let i = 0; i < validFiles.length; i++) {
+        const formData = new FormData();
+        formData.append('image', validFiles[i]);
+        formData.append('key', 'add your API key here');
+        axios.post('https://api.imgbb.com/1/upload', formData, {
+            onUploadProgress: (progressEvent) => {
+                const uploadPercentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
+                progressRef.current.innerHTML = `${uploadPercentage}%`;
+                progressRef.current.style.width = `${uploadPercentage}%`;
+                if (uploadPercentage === 100) {
+                    uploadRef.current.innerHTML = 'File(s) Uploaded';
+                    validFiles.length = 0;
+                    setValidFiles([...validFiles]);
+                    setSelectedFiles([...validFiles]);
+                    setUnsupportedFiles([...validFiles]);
+                }
+            }
+        })
+        .catch(() => {
+            // If error, display a message on the upload modal
+            uploadRef.current.innerHTML = `<span class="error">Error Uploading File(s)</span>`;
+            // set progress bar background color to red
+            progressRef.current.style.backgroundColor = 'red';
+        });
+    }
+}
+
+const closeUploadModal = () => {
+    uploadModalRef.current.style.display = 'none';
+}
+
+const uploadModalRef = useRef();
+const uploadRef = useRef();
+const progressRef = useRef();
+
+<div className="modal" ref={modalRef}>
+    <div className="overlay">
+			{unsupportedFiles.length === 0 && validFiles.length ? <button className="file-upload-btn" onClick={() => uploadFiles()}>Upload Files</button> : ''} 
+{unsupportedFiles.length ? <p>Please remove all unsupported files.</p> : ''}
+		</div>
+    <span className="close">X</span>
+    <div className="modal-image" ref={modalImageRef}></div>
+</div>
+
+<div className="upload-modal" ref={uploadModalRef}>
+	<div className="overlay"></div>
+	<div className="close" onClick={(() => closeUploadModal())}>X</div>
+	<div className="progress-container">
+			<span ref={uploadRef}></span>
+			<div className="progress">
+					<div className="progress-bar" ref={progressRef}></div>
+				</div>
+		</div>
+</div>
+
+const modalImageRef = useRef();
+const modalRef = useRef();
+
+const reader = new FileReader();
+modalRef.current.style.display = "block";
+reader.readAsDataURL(file);
+reader.onload = function(e) {
+}
+
+<span className="close" onClick={(() => closeModal())}>X</span>
+const closeModal = () => {
+    modalRef.current.style.display = "none";
+    modalImageRef.current.style.backgroundImage = 'none';
+}
+
+const openImageModal = (file) => {
+
+}
 
 const DropZone = () => {
 	const [selectedFiles, setSelectedFiles] = useState([]);

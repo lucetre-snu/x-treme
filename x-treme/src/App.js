@@ -10,6 +10,7 @@ import Home from './components/home';
 import Collection from './components/collection';
 import DragDrop from './components/dragdrop';
 import Example from './components/example';
+import DropZone from './components/dropzone';
 
 export default function App() {
   return (
