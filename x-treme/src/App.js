@@ -8,6 +8,7 @@ import {
 
 import Home from './components/home';
 import Collection from './components/collection';
+import DragDrop from './components/dragdrop';
 import Example from './components/example';
 
 export default function App() {
@@ -25,6 +26,9 @@ export default function App() {
             <li>
               <Link to="/example">/example_do_not_remove</Link>
             </li>
+            <li>
+              <Link to="/dragdrop">/dragdrop</Link>
+            </li>
           </ul>
         </nav>
 
@@ -36,6 +40,9 @@ export default function App() {
           </Route>
           <Route path="/example">
             <Example />
+          </Route>
+          <Route path="/dragdrop">
+            <DragDrop />
           </Route>
           <Route path="/">
             <Home />
