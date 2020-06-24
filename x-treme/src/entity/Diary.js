@@ -9,13 +9,13 @@ export default class Diary {
     this.weather = weather;
 
     const [date, time] = dateTime.split(' ');
-    dateTime = date.split(':').join('-') + ' ' + time;
+    dateTime = date.split(':').join('-') + ' ' + (time ? time : '');
     this.dateTime = new Date(dateTime);
     this.src = src;
 
     const dateStr = date.split(':').join('');
     _getWeather(dateStr).then(res => {
-      if (!res) {
+      if (!res || !res.response || !res.response.body || !res.response.body.items) {
         console.log('error while fetching data');
         return;
       }

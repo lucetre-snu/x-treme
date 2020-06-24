@@ -1,95 +1,99 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Diary from "../entity/Diary"
 import ImageMega from '../apis/ImageMega';
 import DiaryDetail from './diary-detail';
 import { getPlayList } from '../apis/DataProcessor';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
-import moment from "moment";
-
 import Calendar from 'react-calendar';
-// import sunny from "../weathers/sunny.jpg";
-// import rainy from "../weathers/rainy.jpg";
-// import cloudy from "../weathers/cloudy.jpg";
-// import snowy from "../weathers/snowy.jpg";
+import moment from "moment";
 
 import 'react-calendar/dist/Calendar.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
 import "./collection.css";
-import "./Calendar.css";
+import "./calendar.css";
 
 export default function Collection() {
-  const [ address, setAddress ] = useState('');
+  const [ address, setAddress ] = useState('youtube.com/playlist?list=PLUKkXeVC39XoNJSe94lJiuinJ3diYhUZQ');
   const [ collection, setCollection ] = useState([]);
-  const [ date, setDate ] = useState([new Date()]);
-  const [ weather, setWeather ] = useState('');
+  const [ mark, setMark ] = useState([]);
+  // const [ date, setDate ] = useState([new Date()]);
+  // const [ weather, setWeather ] = useState('');
   const [ diaryId, setDiaryId ] = useState(0);
-
-  useEffect(() => {
-    document.title = `${weather} ${date}`;
-  });
 
   const handleCollectionChange = (diary) => {
     collection.push(diary);
-    console.log(collection);
     collection.sort(Diary.compare);
     setCollection(collection.slice());
+
     console.log(collection);
+    
+    for (let i = 0; i < collection.length; i++) {
+      const dateTime = collection[i].dateTime;
+      mark.push(moment(dateTime).format("DD-MM-YYYY"));
+      setMark(mark.slice());
+    }
+  }
+
+
+  const createDiaryList = (videoList) => {
+    const info = videoList.videoInfo;
+    for(let i = 0; i < info.length; i++) {
+      const title = info[i].title;
+      const description = info[i].desc;
+      const dateTime = info[i].date[0];
+      const src = info[i].img;
+      const diary = new Diary('video', title, description, dateTime, src);
+      handleCollectionChange(diary);
+    }
+    //console.log('filename: ' + filename);
+    //console.log('description: ' + description);
+    //console.log('dateTime: ' + dateTime);
+    //const diary = new Diary('image', filename, description, dateTime, src);
   }
 
   const fetchYouTube = (e) => {
     e.preventDefault();
+    // https://www.youtube.com/playlist?list=PLUKkXeVC39XoNJSe94lJiuinJ3diYhUZQ
+    const addressPieces = address.split('=');
+    const link = addressPieces[addressPieces.length-1];
 
-    // PLUKkXeVC39Xr97P94HsAvZeWmvcm2fcJI
-    console.log(address);
-    getPlayList(address)
+    console.log(link);
+    getPlayList(link)
     .then((res) => {
+      res = createDiaryList(res);
       console.log(res);
     })
   }
 
-
-  const checkDateDiary = (date) => {
-    for(var i=0; i<collection.length; i++)
-    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
-      {return collection[i]; break;}}
+  const getClosestDiaryId = (date) => {
+    let closestDiaryId = 0;
+    for (let i = 1; i < collection.length; i++) {
+      console.log(Math.abs(collection[i].dateTime - date))
+      if (Math.abs(collection[i].dateTime - date) <
+        Math.abs(collection[closestDiaryId].dateTime - date)) {
+        closestDiaryId = i;
+      }
+    }
+    return closestDiaryId;
   }
 
-  const checkDiaryDate = () => {
-    for(var i=0; i<collection.length; i++)
-    {if(String(date).slice(0,16) === String(collection[i].dateTime).slice(0,16))
-      {}}
-  } 
-
-  const mark=[]
-
-  for(var i=0; i<collection.length; i++)
-  {mark.push(moment(String(collection[i].dateTime).slice(0,15)).format("DD-MM-YYYY"));}
-
-  const onClickDay = (date) => {
-    setDate({date});
-    const selectedDiary = checkDateDiary(date);
-}
-
-
-    for(var i=0; i<collection.length; i++)
-    {console.log(collection[i].dateTime)
-      }
-      
-      
-
-  // const weatherChange = (_weather) => {
-  //   if (_weather === snowy) {setWeather(snowy)}
-  //   else if (_weather === sunny) {setWeather(sunny)}
-  //   else if (_weather === cloudy) {setWeather(cloudy)}
-  //   else if (_weather === rainy) {setWeather(rainy)}
-  // }
+  const onSelectDate = (date) => {
+    date.setHours(12);
+    // setDate({date})
+    if(collection.length === 0)
+      return;
+    const diaryId = getClosestDiaryId(date);
+    // const dateTime = collection[diaryId].dateTime;
+    setDiaryId(diaryId);
+    // setDate({date: dateTime});
+  }
 
   const onChangeDiary = (id) => {
     setDiaryId(id);
-    const diary = collection[id];
-    setDate(diary.dateTime);
-    setWeather(diary.weather);
+    // const diary = collection[id];
+    // setDate(diary.dateTime);
+    // setWeather(diary.weather);
   }
 
   return <div id="collection">
@@ -113,10 +117,6 @@ export default function Collection() {
           </Row>
         </Container>
         
-        {/* <img
-          className="d-block w-100"
-          src={weather}  alt="weather picture"/> */}
-        {diaryId}
         { collection.length === 0 ?
           <h4>다이어리가 존재하지 않습니다.</h4> :
           <Carousel onChange={onChangeDiary} selectedItem={diaryId} showThumbs={false} showStatus={false} useKeyboardArrows className="presentation-mode">
@@ -124,11 +124,12 @@ export default function Collection() {
           </Carousel>
         }
       </div>
-      <div><Calendar onClickDay={onClickDay} //onChange={this.onChange}//
-    /*value={this.state.date}*/ tileClassName={({ date, view }) => {
-      if(mark.find(x=>x===moment(date).format("DD-MM-YYYY"))){
-       return 'highlight'
-      }
-    }} className="react-calendar"/></div>
+      <div>
+        <Calendar onClickDay={onSelectDate} tileClassName={({ date, view }) => {
+          if (mark.find(x => x===moment(date).format("DD-MM-YYYY"))){
+            return 'highlight'
+          }
+        }} className="react-calendar"/>
+      </div>
     </div>;
 }

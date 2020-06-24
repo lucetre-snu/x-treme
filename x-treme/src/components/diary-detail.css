@@ -1,0 +1,19 @@
+div#sunny {
+  background-image: url("../weathers/sunny.jpg");
+  background-size: cover;
+}
+
+div#rainy {
+  background-image: url("../weathers/rainy.jpg");
+  background-size: cover;
+}
+
+div#cloudy {
+  background-image: url("../weathers/cloudy.jpg");
+  background-size: cover;
+}
+
+div#snowy {
+  background-image: url("../weathers/snowy.jpg");
+  background-size: cover;
+}
