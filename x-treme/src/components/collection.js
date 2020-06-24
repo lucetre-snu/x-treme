@@ -24,6 +24,7 @@ export default function Collection() {
 
   const handleCollectionChange = (diary) => {
     collection.push(diary);
+    console.log(collection);
     collection.sort(Diary.compare);
     setCollection(collection.slice());
     console.log(collection);

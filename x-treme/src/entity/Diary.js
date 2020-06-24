@@ -17,6 +17,6 @@ export default class Diary {
   static compare(x, y) {
     if (x.dateTime < y.dateTime)
       return -1;
-    return 0;
+    return 1;
   }
 }
