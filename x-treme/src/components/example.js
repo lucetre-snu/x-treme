@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Button } from 'react-bootstrap';
-import ImageMega from '../apis/ImageMega';
+import { getPlayList } from '../apis/DataProcessor';
 
 export default function Example() {
+  const [ address, setAddress ] = useState('');
+
+  const fetchYouTube = (e) => {
+    e.preventDefault();
+
+    // PLUKkXeVC39Xr97P94HsAvZeWmvcm2fcJI
+    console.log(address);
+    getPlayList(address)
+    .then((res) => {
+      console.log(res);
+    })
+  }
+
   return <div id="example">
     <h2>Example (not to remove) </h2>
 
+    <form>
+      <input type="text" value={address} onChange={e => setAddress(e.target.value)}/>
+      <input type="submit" value="Fetch" onClick={fetchYouTube}/>
+    </form>
     <Button variant="primary">Primary</Button>{' '}
     <Button variant="secondary">Secondary</Button>{' '}
     <Button variant="success">Success</Button>{' '}
@@ -34,11 +51,5 @@ export default function Example() {
       </Row>
     </Container>  
 
-    <div>
-        <h1>
-          Get EXIF data
-        </h1>
-        <ImageMega />
-    </div>
   </div>;
 }
