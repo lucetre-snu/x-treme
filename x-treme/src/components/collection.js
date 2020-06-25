@@ -7,6 +7,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
 import Calendar from 'react-calendar';
 import moment from "moment";
+import logo from '../logo.svg';
 
 import 'react-calendar/dist/Calendar.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; 
@@ -14,7 +15,7 @@ import "./collection.css";
 import "./calendar.css";
 
 export default function Collection() {
-  const [ address, setAddress ] = useState('youtube.com/playlist?list=PLUKkXeVC39XoNJSe94lJiuinJ3diYhUZQ');
+  const [ address, setAddress ] = useState('https://www.youtube.com/playlist?list=PLUKkXeVC39XoNJSe94lJiuinJ3diYhUZQ');
   const [ collection, setCollection ] = useState([]);
   const [ mark, setMark ] = useState([]);
   // const [ date, setDate ] = useState([new Date()]);
@@ -35,16 +36,20 @@ export default function Collection() {
     }
   }
 
-
   const createDiaryList = (videoList) => {
-    const info = videoList.videoInfo;
-    for(let i = 0; i < info.length; i++) {
-      const title = info[i].title;
-      const description = info[i].desc;
-      const dateTime = info[i].date[0];
-      const src = info[i].img;
-      const diary = new Diary('video', title, description, dateTime, src);
-      handleCollectionChange(diary);
+    try {
+      const info = videoList.videoInfo;
+      for(let i = 0; i < info.length; i++) {
+        const title = info[i].title;
+        const description = info[i].desc;
+        const dateTime = info[i].date[0];
+        // const src = info[i].img;
+        const src = info[i].videoId;
+        const diary = new Diary('video', title, description, dateTime, src);
+        handleCollectionChange(diary);
+      }
+    } catch (error) {
+      console.log(error);
     }
     //console.log('filename: ' + filename);
     //console.log('description: ' + description);
@@ -97,28 +102,45 @@ export default function Collection() {
   }
 
   return <div id="collection">
-      <h2>Collection</h2>
       <div>
-      
-        <Container>
+        <Container style={{maxWidth: '100%'}}>
           <Row className="justify-content-md-center">
-            <Col>
-              <h1>Upload Photos</h1>
-              <ImageMega collection={ collection } onCollectionChange={handleCollectionChange} />
+            <Col lg="4" style={{padding: '0'}}>
+              <div style={{display:'table', height:'100%'}} onClick={() => window.location.reload(false)}>
+                <img style={{width: '100px', height: '100px'}} src={logo} className="App-logo" alt="logo" />
+                <h1 style={{ display:'table-cell', verticalAlign: 'middle' }}>Weather Last</h1>
+              </div>
+            </Col>
+            <Col lg="3">
+              <div style={{display:'table', height:'100%'}}>
+                <div style={{ display:'table-cell', verticalAlign: 'middle' }}>
+                  <h3>Upload Photos</h3>
+                  <ImageMega collection={ collection } onCollectionChange={handleCollectionChange} />
+                </div>
+              </div>
             </Col>
 
-            <Col>
-              <h1>Fetch YouTube PlayList</h1>
-              <form>
-                <input type="text" value={address} onChange={e => setAddress(e.target.value)}/>
-                <input type="submit" value="Fetch" onClick={fetchYouTube}/>
-              </form>
+            <Col lg="5">
+              <div style={{display:'table', height:'100%', width:'100%'}}>
+                <div style={{ display:'table-cell', verticalAlign: 'middle' }}>
+                  <h3>Fetch YouTube PlayList</h3>
+                  <form>
+                    <Row className="justify-content-md-center">
+                      <Col>
+                        <input type="text" style={{width: '70%'}} value={address} onChange={e => setAddress(e.target.value)}/>
+                        &nbsp;
+                        <input type="submit" va lue="Fetch" onClick={fetchYouTube}/>  
+                      </Col>
+                    </Row>
+                  </form>
+                </div>
+              </div>
             </Col>
           </Row>
         </Container>
         
         { collection.length === 0 ?
-          <h4>다이어리가 존재하지 않습니다.</h4> :
+          <h4 style={{ textAlign:'center' }}><hr />현재 기록된 다이어리가 없습니다. 추가해주세요.</h4> :
           <Carousel onChange={onChangeDiary} selectedItem={diaryId} showThumbs={false} showStatus={false} useKeyboardArrows className="presentation-mode">
             {collection.map((diary, index) => <DiaryDetail diary={diary} key={index} />)}
           </Carousel>

@@ -1,23 +1,24 @@
 import React from "react";
+
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  // Link
 } from "react-router-dom";
 
-import Home from './components/home';
+// import Home from './components/home';
 import Collection from './components/collection';
-import Example from './components/example';
+// import Example from './components/example';
 
 export default function App() {
   return (
     <Router>
       <div>
-        <nav>
+        {/* <nav>
           <ul>
             <li>
-              <Link to="/">/home</Link>
+              <Link to="/home">/home</Link>
             </li>
             <li>
               <Link to="/collection">/collection</Link>
@@ -26,19 +27,19 @@ export default function App() {
               <Link to="/example">/example_do_not_remove</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/collection">
-            <Collection />
+        <Switch> 
+          {/* <Route path="/home">
+            <Home />
           </Route>
           <Route path="/example">
             <Example />
-          </Route>
+          </Route> */}
           <Route path="/">
-            <Home />
+            <Collection />
           </Route>
         </Switch>
       </div>

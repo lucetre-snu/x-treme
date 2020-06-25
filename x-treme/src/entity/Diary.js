@@ -13,7 +13,7 @@ export default class Diary {
     this.dateTime = new Date(dateTime);
     this.src = src;
 
-    const dateStr = date.split(':').join('');
+    const dateStr = dateTime.split('-').join('').substring(0, 8);
     _getWeather(dateStr).then(res => {
       if (!res || !res.response || !res.response.body || !res.response.body.items) {
         console.log('error while fetching data');

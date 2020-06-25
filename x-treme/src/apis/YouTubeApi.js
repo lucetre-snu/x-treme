@@ -1,6 +1,6 @@
 
 async function _getPlayList(plId) {
-  const YOUTUBE_API_KEY = 'AIzaSyB2JNOrSym1Cu5hMFVbIHZpm1zS2al8OIU';
+  const YOUTUBE_API_KEY = 'AIzaSyDdSo8arlAESy4lR1xgWuc1bHCHTL8iTTw';
   const url = `https://www.googleapis.com/youtube/v3/playlistItems?maxResults=5&part=id,snippet,contentDetails&fields=nextPageToken,prevPageToken,items(id,snippet(title,description,thumbnails(high(url)),publishedAt),contentDetails(videoId))&playlistId=${plId}&key=${YOUTUBE_API_KEY}`
   const options = {
       method: 'GET',

@@ -12,7 +12,11 @@ export default function DiaryDetail(props) {
               <Card.Title><h3>{props.diary.title}</h3></Card.Title>
               <Card.Text>{props.diary.dateTime.toLocaleString()}</Card.Text>
             </Card.Body>
-            <Card.Img variant="top" src={props.diary.src} style={{ maxWidth:'100%', height:'auto' }} />
+            { props.diary.diaryType === 'video'?
+              <iframe title={props.diary.title} height="500" src={'https://www.youtube.com/embed/' + props.diary.src} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            :
+              <Card.Img variant="top" src={props.diary.src} style={{ maxWidth:'100%', height:'auto' }} />
+            }
             <Card.Body>
               <Card.Text>{props.diary.description}</Card.Text>
             </Card.Body>
