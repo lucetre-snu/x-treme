@@ -8,7 +8,7 @@
 ### How to Start
 * 날씨 API를 사용하기 위해서는 Allow CORS: Access-Control-Allow-Origin 확장 프로그램 설치 및 실행
   * [Allow CORS 크롬 익스텐션](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf?hl=ko)
-* [](http://weather-last.surge.sh/)
+* http://weather-last.surge.sh/
 
 ### x-treme Members
 * 김지수
